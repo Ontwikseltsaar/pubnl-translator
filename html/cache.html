@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/icons/icon16.png" />
+    <link rel="stylesheet" href="/css/cache.css" />
+    <title data-i18n="cacheDocumentTitle">PubNL Translator Subtitle Cache</title>
+  </head>
+  <body>
+    <div>
+      <h1 data-i18n="cacheTitle"></h1>
+      <div class="button-edge is-disabled">
+        <button id="download-selected-button">
+          <img src="/icons/google-fonts/download.svg" alt="Download" width="20px" /><span data-i18n="cacheDownload"></span>
+        </button> </div
+      ><div class="button-edge is-disabled">
+        <button id="delete-selected-button">
+          <img src="/icons/google-fonts/close.svg" alt="Delete" width="20px" /><span data-i18n="cacheDelete"></span>
+        </button>
+      </div>
+      <table id="cache-table">
+        <thead>
+          <tr>
+            <th scope="col"><input class="master-checkbox" type="checkbox" /></th>
+            <th scope="col" class="sortable-header"><span data-i18n="cacheHeaderTitle"></span></th>
+            <th scope="col" class="sortable-header"><span data-i18n="cacheHeaderLanguage"></span></th>
+            <th scope="col" class="sortable-header"><span data-i18n="cacheHeaderMediaSource"></span></th>
+            <th scope="col" class="sortable-header"><span data-i18n="cacheHeaderSubtitleSource"></span></th>
+            <th scope="col" class="sortable-header"><span data-i18n="cacheHeaderSourceLanguage"></span></th>
+            <th scope="col" class="sortable-header is-hidden"><span>Key</span></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <script src="/lib/jszip/jszip.min.js"></script>
+    <script type="module" src="/js/cache.js"></script>
+  </body>
+</html>

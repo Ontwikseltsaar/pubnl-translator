@@ -1,0 +1,143 @@
+* {
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
+  font-style: normal;
+  font-variant: normal;
+  line-height: 24px;
+}
+body {
+  margin: 0;
+  max-width: max-content;
+  background-color: var(--light-dark-background);
+}
+h1 {
+  font-size: 24px;
+  text-align: center;
+}
+
+/* Theme settings. */
+:root {
+  color-scheme: light dark;
+  --light-dark-background: light-dark(white, #1b1b1b);
+  --light-dark-highlight: light-dark(#eee, #333);
+  --light-dark-status-highlight: light-dark(#ddd, #444);
+  --light-dark-progress-bar: light-dark(#ccc, #555);
+  --light-dark-switch: light-dark(#ccc, #555);
+  --light-dark-description: light-dark(gray, lightgray);
+  --light-dark-image: light-dark(0, 1);
+}
+.dark .no-arrow::after,
+.dark .asc-arrow::after,
+.dark .desc-arrow::after,
+.dark img {
+  filter: invert(1);
+}
+.dark .no-arrow:hover::after {
+  opacity: 0.5 !important;
+}
+.dark .is-disabled * {
+  filter: invert(14%) sepia(0%) saturate(0%) hue-rotate(177deg) brightness(98%) contrast(84%) !important;
+}
+
+/* Button settings. */
+.button-edge {
+  margin-left: 15px;
+  display: inline-block;
+  border-radius: 20px;
+  border: 2px solid var(--light-dark-highlight);
+  overflow: hidden;
+}
+button > img {
+  margin-right: 5px;
+}
+button > img,
+button > span {
+  position: relative;
+  vertical-align: middle;
+}
+button {
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: text;
+  line-height: 100%;
+}
+button:hover {
+  background-color: var(--light-dark-highlight);
+}
+.is-disabled * {
+  color: var(--light-dark-highlight);
+  filter: brightness(0) saturate(100%) invert(99%) sepia(2%) saturate(23%) hue-rotate(239deg) brightness(114%) contrast(87%);
+  background: none !important;
+  cursor: auto;
+}
+
+/* Table settings. */
+table {
+  margin-left: 15px;
+  margin-top: 10px;
+  border: 2px solid var(--light-dark-highlight);
+  border-radius: 20px;
+  border-spacing: 0;
+  overflow: hidden;
+}
+thead,
+tr:hover {
+  background-color: var(--light-dark-highlight);
+}
+th,
+td {
+  padding: 10px;
+  vertical-align: middle;
+}
+th:not(:has(input)),
+td,
+input {
+  cursor: pointer;
+}
+input {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  margin: 0;
+  accent-color: #ff6d00;
+  box-sizing: border-box;
+}
+.is-hidden {
+  display: none;
+}
+
+/* Sorting arrows. */
+th {
+  white-space: nowrap;
+  position: relative;
+  vertical-align: middle;
+  line-height: 100%;
+}
+.no-arrow::after {
+  background-image: none;
+}
+.no-arrow:hover::after {
+  background-image: url("/icons/google-fonts/arrow_drop_up.svg");
+  opacity: 0.35;
+}
+.asc-arrow::after {
+  background-image: url("/icons/google-fonts/arrow_drop_up.svg");
+}
+.desc-arrow::after {
+  background-image: url("/icons/google-fonts/arrow_drop_down.svg");
+}
+.no-arrow::after,
+.asc-arrow::after,
+.desc-arrow::after {
+  background-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  content: "";
+  vertical-align: middle;
+}
+th > span {
+  vertical-align: middle;
+}

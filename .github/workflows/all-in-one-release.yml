@@ -1,0 +1,207 @@
+name: All-in-one release
+
+on:
+  workflow_dispatch:
+    inputs:
+      github-release:
+        description: "GitHub release"
+        required: true
+        default: "No"
+        type: choice
+        options:
+          - "Signed"
+          - "Unsigned"
+          - "No"
+      amo-listing:
+        description: "AMO listing"
+        required: true
+        default: "No"
+        type: choice
+        options:
+          - "Yes"
+          - "No"
+
+jobs:
+  validate:
+    name: Validate version and source files
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    runs-on: ubuntu-latest
+
+    outputs:
+      VERSION_NUMBER: ${{ steps.check-tag-validity.outputs.VERSION_NUMBER }}
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check tag validity
+        id: check-tag-validity
+        shell: pwsh
+        run: ./tools/validate/Check-Tag.ps1 -Ref "${{ github.ref }}"
+      - name: Check that default branch contains tag
+        shell: pwsh
+        run: ./tools/validate/Check-Branch.ps1 -DefaultBranch "${{ github.event.repository.default_branch }}" -Tag "${{ env.VERSION_NUMBER }}"
+      - name: Validate manifest.json version
+        shell: pwsh
+        run: ./tools/validate/Check-Manifest.ps1 -Version "${{ env.VERSION_NUMBER }}"
+      - name: Check existence of changes for this version
+        shell: pwsh
+        run: ./tools/validate/Check-Changelog.ps1 -Version "${{ env.VERSION_NUMBER }}"
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Restore Node.js modules from cache
+        id: restore-modules
+        uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: node-modules
+      - name: Install Node.js modules
+        if: steps.restore-modules.outputs.cache-hit != 'true'
+        shell: bash
+        run: npm install prettier web-ext --no-save
+      - name: Cache Node.js modules
+        if: steps.restore-modules.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: node_modules
+          key: node-modules
+      - name: Check formatting
+        shell: pwsh
+        run: ./tools/validate/Check-Formatting.ps1
+      - name: Lint code
+        shell: pwsh
+        run: ./tools/validate/Check-Code.ps1
+      - name: Restore PSScriptAnalyzer from cache
+        id: restore-psscriptanalyzer
+        uses: actions/cache/restore@v4
+        with:
+          path: /home/runner/.local/share/powershell/Modules/
+          key: psscriptanalyzer
+      - name: Install PSScriptAnalyzer
+        if: steps.restore-psscriptanalyzer.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: Install-Module -Name PSScriptAnalyzer
+      - name: Cache PSScriptAnalyzer
+        if: steps.restore-psscriptanalyzer.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: /home/runner/.local/share/powershell/Modules/
+          key: psscriptanalyzer
+      - name: Check script formatting
+        shell: pwsh
+        run: ./tools/validate/Check-ScriptFormatting.ps1
+      - name: Check script code
+        shell: pwsh
+        run: ./tools/validate/Check-ScriptCode.ps1
+
+  github-release:
+    name: GitHub release
+    needs: validate
+    if: ${{ inputs.github-release != 'No' }}
+    runs-on: ubuntu-latest
+
+    env:
+      VERSION_NUMBER: ${{ needs.validate.outputs.VERSION_NUMBER }}
+      SIGNED: ${{ inputs.github-release == 'Signed' }}
+      XPI_FILE: "pubnl-translator-${{ needs.validate.outputs.VERSION_NUMBER }}${{ inputs.github-release == 'Signed' && '-signed' || '' }}.xpi"
+      INSTRUCTIONS_FILE: "tools/templates/RELEASE_INSTRUCTIONS_${{ inputs.github-release == 'Signed' && 'SIGNED' || 'UNSIGNED' }}.md"
+
+    steps:
+      - name: Clone repository (sparse)
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: ""
+      - name: Restore Node.js modules from cache
+        id: restore-modules
+        uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: node-modules
+      - name: Install Node.js modules
+        if: steps.restore-modules.outputs.cache-hit != 'true'
+        shell: bash
+        run: npm install prettier web-ext --no-save
+      - name: Cache Node.js modules
+        if: steps.restore-modules.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: node_modules
+          key: node-modules
+      - name: Create release notes
+        shell: pwsh
+        run: ./tools/Create-ReleaseNotes.ps1 -InstructionsFilepath "${{ env.INSTRUCTIONS_FILE }}" -XPIFilename "${{ env.XPI_FILE }}" -Version "${{ env.VERSION_NUMBER }}"
+      - name: Update AMO metadata
+        if: ${{ env.SIGNED == 'true' }}
+        shell: pwsh
+        run: ./tools/Update-Metadata.ps1 -Version "${{ env.VERSION_NUMBER }}"
+      - name: Build PubNL Translator (signed)
+        if: ${{ env.SIGNED == 'true' }}
+        shell: pwsh
+        run: ./tools/Build-SignedUnlisted.ps1 -XPIFileName "${{ env.XPI_FILE }}" -Version "${{ env.VERSION_NUMBER }}" -Key "${{ secrets.FIREFOX_JWT_ISSUER }}" -Secret "${{ secrets.FIREFOX_JWT_SECRET }}"
+      - name: Build PubNL Translator (unsigned)
+        if: ${{ env.SIGNED != 'true' }}
+        shell: pwsh
+        run: ./tools/Build-Unsigned.ps1 -XPIFilename "${{ env.XPI_FILE }}"
+      - name: Release PubNL Translator
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: ./tools/Release-GitHub.ps1 -XPIFilename "${{ env.XPI_FILE }}" -Version "${{ env.VERSION_NUMBER }}" ${{ env.SIGNED == 'true' && '-Signed' || '' }}
+      - name: Update updates.json
+        if: ${{ env.SIGNED == 'true' }}
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: ./tools/Update-JSON.ps1 -XPIFilename "${{ env.XPI_FILE }}" -Version "${{ env.VERSION_NUMBER }}"
+      - name: Upload new/modified files as artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pubnl-translator-github-release-artifacts
+          path: output/
+
+  amo-listing:
+    name: AMO listing
+    needs: validate
+    if: ${{ inputs.amo-listing == 'Yes' }}
+    runs-on: ubuntu-latest
+
+    env:
+      VERSION_NUMBER: ${{ needs.validate.outputs.VERSION_NUMBER }}
+
+    steps:
+      - name: Clone repository (sparse)
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: ""
+      - name: Restore Node.js modules from cache
+        id: restore-modules
+        uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: node-modules
+      - name: Install Node.js modules
+        if: steps.restore-modules.outputs.cache-hit != 'true'
+        shell: bash
+        run: npm install prettier web-ext --no-save
+      - name: Cache Node.js modules
+        if: steps.restore-modules.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: node_modules
+          key: node-modules
+      - name: Update AMO metadata
+        shell: pwsh
+        run: ./tools/Update-Metadata.ps1 -Version "${{ env.VERSION_NUMBER }}"
+      - name: Submit PubNL Translator to AMO
+        shell: pwsh
+        run: ./tools/Build-SignedListed.ps1 -Key "${{ secrets.FIREFOX_JWT_ISSUER }}" -Secret "${{ secrets.FIREFOX_JWT_SECRET }}"
+      - name: Upload new/modified files as artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pubnl-translator-amo-listing-artifacts
+          path: output/

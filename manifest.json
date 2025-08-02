@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extensionName__",
+  "description": "__MSG_extensionDescription__",
+  "author": "Thom van Mulligen",
+  "default_locale": "en",
+  "version": "1.0.0",
+  "icons": {
+    "32": "icons/icon.svg",
+    "64": "icons/icon.svg"
+  },
+  "host_permissions": [
+    "*://prod.npoplayer.nl/stream-link",
+    "*://cdn.npoplayer.nl/subtitles/*",
+    "*://npo.nl/*",
+    "*://npokennis.nl/*",
+    "*://schooltv.nl/*",
+    "*://www.bvn.tv/*",
+    "*://www.npodoc.nl/*",
+    "*://www.zapp.nl/*",
+    "*://www.zappelin.nl/*"
+  ],
+  "optional_host_permissions": ["<all_urls>"],
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "webRequest",
+    "webRequestBlocking",
+    "webRequestFilterResponse",
+    "notifications",
+    "downloads"
+  ],
+  "background": {
+    "page": "html/background.html",
+    "type": "module"
+  },
+  "action": {
+    "default_icon": "icons/icon.svg",
+    "default_title": "__MSG_extensionName__",
+    "default_popup": "html/popup.html"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "pubnl-translator@ontwikseltsaar"
+    }
+  }
+}

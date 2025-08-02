@@ -1,0 +1,30 @@
+{
+  "categories": ["language-support"],
+  "default_locale": "en-US",
+  "description": {
+    "en-US": "",
+    "nl": ""
+  },
+  "homepage": {
+    "en-US": "https://github.com/Ontwikseltsaar/pubnl-translator"
+  },
+  "name": {
+    "en-US": "PubNL Translator",
+    "nl": "PubNL Translator"
+  },
+  "slug": "pubnl-translator",
+  "summary": {
+    "en-US": "Replaces subtitles on NPO videos with auto-translated subtitles.",
+    "nl": "Vervangt ondertitels in NPO-video's door automatisch vertaalde ondertitels."
+  },
+  "support_url": {
+    "en-US": "https://github.com/Ontwikseltsaar/pubnl-translator/issues"
+  },
+  "tags": ["translate"],
+  "version": {
+    "license": "Apache-2.0",
+    "release_notes": {
+      "en-US": ""
+    }
+  }
+}

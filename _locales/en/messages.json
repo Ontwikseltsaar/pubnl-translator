@@ -1,0 +1,281 @@
+{
+  "extensionName": {
+    "message": "PubNL Translator",
+    "description": "Name of the extension."
+  },
+
+  "extensionDescription": {
+    "message": "Replaces subtitles in the NPO player with auto-translated subtitles.",
+    "description": "Description of the extension."
+  },
+
+  "popupDocumentTitle": {
+    "message": "PubNL Translator Popup",
+    "description": "Document title of the popup."
+  },
+
+  "popupName": {
+    "message": "PubNL Translator",
+    "description": "Popup name of the extension."
+  },
+
+  "popupDescription": {
+    "message": "Replace NPO subtitles with auto-translated subtitles.",
+    "description": "Popup description of the extension."
+  },
+
+  "popupStatusReady": {
+    "message": "Ready to translate.",
+    "description": "PubNL Translator is on and ready to translate."
+  },
+
+  "popupStatusTranslating": {
+    "message": "Translating...",
+    "description": "PubNL Translator is translating."
+  },
+
+  "popupStatusOff": {
+    "message": "PubNL Translator is off.",
+    "description": "PubNL Translator is turned off."
+  },
+
+  "popupStatusReload": {
+    "message": "Refresh NPO webpages to see changes.",
+    "description": "Tells the user to reload open NPO tabs to see changes."
+  },
+
+  "popupTargetLanguage": {
+    "message": "Translate to",
+    "description": "Choose the language to translate to."
+  },
+
+  "popupNotifyMe": {
+    "message": "Notify me when translating",
+    "description": "Choose whether to be notified when PubNL Translator is translating."
+  },
+
+  "popupViewCached": {
+    "message": "View cached subtitles",
+    "description": "Click to view the cached subtitles."
+  },
+
+  "popupReportIssue": {
+    "message": "Report issue",
+    "description": "Click to report an issue with PubNL Translator."
+  },
+
+  "popupLeaveFeedback": {
+    "message": "Leave feedback",
+    "description": "Click to leave feedback about PubNL Translator."
+  },
+
+  "popupLeaveFeedbackURL": {
+    "message": "https://addons.mozilla.org/en-US/firefox/addon/pubnl-translator/",
+    "description": "The URL to the add-on."
+  },
+
+  "popupAbout": {
+    "message": "About",
+    "description": "Click to see more information about PubNL Translator."
+  },
+
+  "popupDefault": {
+    "message": "Default",
+    "description": "The default theme."
+  },
+
+  "popupLight": {
+    "message": "Light",
+    "description": "The light theme."
+  },
+
+  "popupDark": {
+    "message": "Dark",
+    "description": "The dark theme."
+  },
+
+  "aboutPubNLTranslator": {
+    "message": "$what$ by $who$",
+    "description": "About PubNL Translator.",
+    "placeholders": {
+      "what": {
+        "content": "PubNL Translator"
+      },
+      "who": {
+        "content": "Thom van Mulligen"
+      }
+    }
+  },
+
+  "aboutExternalDependencies": {
+    "message": "External Dependencies",
+    "description": "External sources used to make PubNL Translator."
+  },
+
+  "aboutFontAwesome": {
+    "message": "$what$ by $who$",
+    "description": "About Font Awesome.",
+    "placeholders": {
+      "what": {
+        "content": "Font Awesome"
+      },
+      "who": {
+        "content": "Font Awesome Team"
+      }
+    }
+  },
+
+  "aboutGoogleFonts": {
+    "message": "$what$ by $who$",
+    "description": "About Google Fonts.",
+    "placeholders": {
+      "what": {
+        "content": "Google Fonts"
+      },
+      "who": {
+        "content": "Google"
+      }
+    }
+  },
+
+  "aboutVttJs": {
+    "message": "$what$ by $who$",
+    "description": "About vtt.js.",
+    "placeholders": {
+      "what": {
+        "content": "vtt.js"
+      },
+      "who": {
+        "content": "Mozilla"
+      }
+    }
+  },
+
+  "aboutJSZip": {
+    "message": "$what$ by $who$",
+    "description": "About JSZip.",
+    "placeholders": {
+      "what": {
+        "content": "JSZip"
+      },
+      "who": {
+        "content": "Stuart Knightley"
+      }
+    }
+  },
+
+  "cacheDocumentTitle": {
+    "message": "PubNL Translator Subtitle Cache",
+    "description": "Document title of the cache."
+  },
+
+  "cacheTitle": {
+    "message": "PubNL Translator Subtitle Cache",
+    "description": "Cache of all currently stored translated subtitles."
+  },
+
+  "cacheDownload": {
+    "message": "Download selected",
+    "description": "Download the selected subtitles."
+  },
+
+  "cacheDelete": {
+    "message": "Delete selected",
+    "description": "Delete the selected subtitles."
+  },
+
+  "cacheHeaderTitle": {
+    "message": "Title",
+    "description": "Media title."
+  },
+
+  "cacheHeaderLanguage": {
+    "message": "Language",
+    "description": "Language of the translated subtitles."
+  },
+
+  "cacheHeaderMediaSource": {
+    "message": "Media source",
+    "description": "URL to the media source."
+  },
+
+  "cacheHeaderSubtitleSource": {
+    "message": "Subtitle source",
+    "description": "URL to the subtitle source."
+  },
+
+  "cacheHeaderSourceLanguage": {
+    "message": "Source language",
+    "description": "Language of the original subtitles."
+  },
+
+  "notificationTitle": {
+    "message": "PubNL Translator: $name$",
+    "description": "Tells the user what the notification is about.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "NOS Journaal"
+      }
+    }
+  },
+
+  "notificationTranslating": {
+    "message": "Translating to $language$...",
+    "description": "Tells the user that PubNL Translator is translating.",
+    "placeholders": {
+      "language": {
+        "content": "$1",
+        "example": "English"
+      }
+    }
+  },
+
+  "notificationUsingCached": {
+    "message": "Using cached translation in $language$.",
+    "description": "Tells the user that PubNL Translator is using cached subtitles.",
+    "placeholders": {
+      "language": {
+        "content": "$1",
+        "example": "English"
+      }
+    }
+  },
+
+  "notificationUsingOriginal": {
+    "message": "Subtitles are already in $language$. Using original subtitles.",
+    "description": "Tells the user that PubNL Translator is using the original subtitles.",
+    "placeholders": {
+      "language": {
+        "content": "$1",
+        "example": "English"
+      }
+    }
+  },
+
+  "notificationLanguageError": {
+    "message": "Error determining source language. Using original subtitles.",
+    "description": "Tells the user that PubNL Translator encountered a problem determining the source language."
+  },
+
+  "notificationTranslationError": {
+    "message": "Error translating to $language$. Using original subtitles.",
+    "description": "Tells the user that PubNL Translator encountered a problem translating subtitles.",
+    "placeholders": {
+      "language": {
+        "content": "$1",
+        "example": "English"
+      }
+    }
+  },
+
+  "unknown": {
+    "message": "Unknown",
+    "description": "Used in various places when data is not known."
+  },
+
+  "backgroundDocumentTitle": {
+    "message": "PubNL Translator Background Page",
+    "description": "Document title of the background page."
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "extensionName": {
+    "message": "PubNL Translator",
+    "description": "Naam van de extensie."
+  },
+
+  "extensionDescription": {
+    "message": "Vervangt ondertitels in de NPO-speler door automatisch vertaalde ondertitels.",
+    "description": "Omschrijving van de extensie."
+  },
+
+  "popupDocumentTitle": {
+    "message": "PubNL Translator Popup",
+    "description": "Documenttitel van de popup."
+  },
+
+  "popupName": {
+    "message": "PubNL Translator",
+    "description": "Popup-naam van de extensie."
+  },
+
+  "popupDescription": {
+    "message": "Vervang NPO-ondertitels door automatisch vertaalde ondertitels.",
+    "description": "Popup-omschrijving van de extensie."
+  },
+
+  "popupStatusReady": {
+    "message": "Klaar om te vertalen.",
+    "description": "PubNL Translator staat aan en is klaar om te vertalen."
+  },
+
+  "popupStatusTranslating": {
+    "message": "Aan het vertalen...",
+    "description": "PubNL Translator is aan het vertalen."
+  },
+
+  "popupStatusOff": {
+    "message": "PubNL Translator staat uit.",
+    "description": "PubNL Translator is uitgeschakeld."
+  },
+
+  "popupStatusReload": {
+    "message": "Ververs NPO-webpagina's om wijzigingen te zien.",
+    "description": "Vertelt de gebruiker dat geopende NPO-tabbladen herlaad moeten worden om de veranderingen te zien."
+  },
+
+  "popupTargetLanguage": {
+    "message": "Vertalen naar",
+    "description": "Kies de taal om naar te vertalen."
+  },
+
+  "popupNotifyMe": {
+    "message": "Stuur meldingen tijdens het vertalen",
+    "description": "Kies om meldingen te krijgen wanneer PubNL Translator aan het vertalen is."
+  },
+
+  "popupViewCached": {
+    "message": "Bekijk gecachte ondertitels",
+    "description": "Klik om de ondertitelcache te bekijken."
+  },
+
+  "popupReportIssue": {
+    "message": "Meld een probleem",
+    "description": "Klik om een probleem met PubNL Translator te melden."
+  },
+
+  "popupLeaveFeedback": {
+    "message": "Feedback achterlaten",
+    "description": "Klik om feedback achter te laten over PubNL Translator."
+  },
+
+  "popupLeaveFeedbackURL": {
+    "message": "https://addons.mozilla.org/nl/firefox/addon/pubnl-translator/",
+    "description": "De URL naar de add-on."
+  },
+
+  "popupAbout": {
+    "message": "Over",
+    "description": "Klik voor meer informatie over PubNL Translator."
+  },
+
+  "popupDefault": {
+    "message": "Standaard",
+    "description": "Het standaardthema."
+  },
+
+  "popupLight": {
+    "message": "Licht",
+    "description": "Het lichte thema."
+  },
+
+  "popupDark": {
+    "message": "Donker",
+    "description": "Het donkere thema."
+  },
+
+  "aboutPubNLTranslator": {
+    "message": "$wat$ door $wie$",
+    "description": "Over PubNL Translator.",
+    "placeholders": {
+      "wat": {
+        "content": "PubNL Translator"
+      },
+      "wie": {
+        "content": "Thom van Mulligen"
+      }
+    }
+  },
+
+  "aboutExternalDependencies": {
+    "message": "Externe Afhankelijkheden",
+    "description": "Externe bronnen die gebruikt zijn om PubNL Translator te maken."
+  },
+
+  "aboutFontAwesome": {
+    "message": "$wat$ door $wie$",
+    "description": "Over Font Awesome.",
+    "placeholders": {
+      "wat": {
+        "content": "Font Awesome"
+      },
+      "wie": {
+        "content": "Font Awesome Team"
+      }
+    }
+  },
+
+  "aboutGoogleFonts": {
+    "message": "$wat$ door $wie$",
+    "description": "Over Google Fonts.",
+    "placeholders": {
+      "wat": {
+        "content": "Google Fonts"
+      },
+      "wie": {
+        "content": "Google"
+      }
+    }
+  },
+
+  "aboutVttJs": {
+    "message": "$wat$ door $wie$",
+    "description": "Over vtt.js.",
+    "placeholders": {
+      "wat": {
+        "content": "vtt.js"
+      },
+      "wie": {
+        "content": "Mozilla"
+      }
+    }
+  },
+
+  "aboutJSZip": {
+    "message": "$wat$ door $wie$",
+    "description": "Over JSZip.",
+    "placeholders": {
+      "wat": {
+        "content": "JSZip"
+      },
+      "wie": {
+        "content": "Stuart Knightley"
+      }
+    }
+  },
+
+  "cacheDocumentTitle": {
+    "message": "PubNL Translator Ondertitelcache",
+    "description": "Documenttitel van de cache."
+  },
+
+  "cacheTitle": {
+    "message": "PubNL Translator Ondertitelcache",
+    "description": "Cache met alle opgeslagen vertaalde ondertitels."
+  },
+
+  "cacheDownload": {
+    "message": "Selectie downloaden",
+    "description": "Download de geselecteerde ondertitels."
+  },
+
+  "cacheDelete": {
+    "message": "Selectie verwijderen",
+    "description": "Verwijder de geselecteerde ondertitels."
+  },
+
+  "cacheHeaderTitle": {
+    "message": "Titel",
+    "description": "Mediatitel."
+  },
+
+  "cacheHeaderLanguage": {
+    "message": "Taal",
+    "description": "Taal van de vertaalde ondertitels."
+  },
+
+  "cacheHeaderMediaSource": {
+    "message": "Mediabron",
+    "description": "URL naar de mediabron."
+  },
+
+  "cacheHeaderSubtitleSource": {
+    "message": "Ondertitelbron",
+    "description": "URL naar de ondertitelbron."
+  },
+
+  "cacheHeaderSourceLanguage": {
+    "message": "Brontaal",
+    "description": "Taal van de oorspronkelijke ondertitels."
+  },
+
+  "notificationTitle": {
+    "message": "PubNL Translator: $naam$",
+    "description": "Vertelt de gebruiker waar de melding over gaat.",
+    "placeholders": {
+      "naam": {
+        "content": "$1",
+        "example": "NOS Journaal"
+      }
+    }
+  },
+
+  "notificationTranslating": {
+    "message": "Vertalen naar het $taal$...",
+    "description": "Vertelt de gebruiker dat PubNL Translator aan het vertalen is.",
+    "placeholders": {
+      "taal": {
+        "content": "$1",
+        "example": "Engels"
+      }
+    }
+  },
+
+  "notificationUsingCached": {
+    "message": "Gecachte vertaling in het $taal$ wordt gebruikt.",
+    "description": "Vertelt de gebruiker dat PubNL Translator gecachte ondertitels gebruikt.",
+    "placeholders": {
+      "taal": {
+        "content": "$1",
+        "example": "Engels"
+      }
+    }
+  },
+
+  "notificationUsingOriginal": {
+    "message": "Ondertitels zijn al in het $taal$. Oospronkelijke ondertitels worden gebruikt.",
+    "description": "Vertelt de gebruiker dat PubNL Translator de oorspronkelijke ondertitels aan het gebruiken is.",
+    "placeholders": {
+      "taal": {
+        "content": "$1",
+        "example": "Engels"
+      }
+    }
+  },
+
+  "notificationLanguageError": {
+    "message": "Fout bij het bepalen van de brontaal. Oorspronkelijke ondertitels worden gebruikt.",
+    "description": "Vertelt de gebruiker dat PubNL Translator een fout is tegengekomen bij het bepalen van de brontaal."
+  },
+
+  "notificationTranslationError": {
+    "message": "Fout bij het vertalen naar het $taal$. Oorspronkelijke ondertitels worden gebruikt.",
+    "description": "Vertelt de gebruiker dat PubNL Translator een fout is tegengekomen tijdens het vertalen van de ondertitels.",
+    "placeholders": {
+      "taal": {
+        "content": "$1",
+        "example": "Engels"
+      }
+    }
+  },
+
+  "unknown": {
+    "message": "Onbekend",
+    "description": "Wordt op verscheidene plekken gebruikt wanneer data niet bekend is."
+  },
+
+  "backgroundDocumentTitle": {
+    "message": "PubNL Translator Achtergrondpagina",
+    "description": "Documenttitel van de achtergrondpagina."
+  }
+}

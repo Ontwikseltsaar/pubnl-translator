@@ -1,0 +1,9 @@
+PubNL Translator allows you to watch content by [NPO](https://en.wikipedia.org/wiki/Nederlandse_Publieke_Omroep_%28organisation%29) with subtitles in a language other than Dutch. Subtitles are translated using Google Translate and can be translated to any language it supports.
+
+**How to use PubNL Translator**
+
+After installing, start watching any video on an NPO website. Make sure to enable the subtitles. PubNL Translator will automatically translate the subtitles and replace them in the video.
+
+By default, PubNL Translator will translate subtitles into English, but this can be changed to any language that Google Translate supports.
+
+For more information, check out the [GitHub page of PubNL Translator](https://github.com/Ontwikseltsaar/pubnl-translator).
