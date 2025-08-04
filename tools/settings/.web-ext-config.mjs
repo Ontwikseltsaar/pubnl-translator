@@ -1,3 +1,3 @@
 export default {
-  ignoreFiles: ["LICENSE", "*.md", "tools/", "updates.json"]
+  ignoreFiles: ["LICENSE", "*.md", "output/", "tools/", "updates.json"]
 };

@@ -1,7 +1,13 @@
 {
   "addons": {
     "pubnl-translator@ontwikseltsaar": {
-      "updates": []
+      "updates": [
+        {
+          "version": "1.0.0.0",
+          "update_link": "https://github.com/Ontwikseltsaar/pubnl-translator/releases/download/1.0.0/pubnl-translator-1.0.0-signed.xpi",
+          "update_hash": "sha256:5c8040e4764eb707b7db9cff93bf1d40b7a6fba3b75a28ad53bcad5e014c8fd0"
+        }
+      ]
     }
   }
 }
