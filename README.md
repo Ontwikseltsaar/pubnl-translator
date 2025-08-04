@@ -20,7 +20,7 @@ By default, PubNL Translator will translate subtitles into English, but this can
 
 PubNL Translator will only work for videos that already have subtitles.
 
-## 💡 What NPO websites are supported?
+## 💡 Which NPO websites are supported?
 
 Using PubNL Translator, you can watch translated NPO content on the following websites:
 

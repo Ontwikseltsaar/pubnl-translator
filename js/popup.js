@@ -184,9 +184,8 @@ import { GoogleTranslateV1Translator } from "./translation-engines/google-transl
 
   function displayVersion() {
     const version = browser.runtime.getManifest().version;
-    const isDeveloperBuild = (version.match(/\./g) || []).length === 3;
-    document.getElementById("version-link").innerText =
-      `v${isDeveloperBuild ? version.substring(0, version.length - 2) : version}`;
+    const isUnlisted = (version.match(/\./g) || []).length === 3;
+    document.getElementById("version-link").innerText = `v${isUnlisted ? version.substring(0, version.length - 2) : version}`;
   }
 
   function displayThemeImages(isLight) {
