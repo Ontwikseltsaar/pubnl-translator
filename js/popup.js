@@ -1,6 +1,7 @@
 "use strict";
 
 import { settings, status } from "./storage.js";
+import { displayTheme, getNextTheme } from "./theme.js";
 import { GoogleTranslateV1Translator } from "./translation-engines/google-translate-v1.js";
 
 (async () => {
@@ -30,23 +31,10 @@ import { GoogleTranslateV1Translator } from "./translation-engines/google-transl
 
   document.getElementById("theme-button").addEventListener("click", () => {
     settings.getTheme().then(theme => {
-      let newTheme = "";
-      switch (theme) {
-        case "light dark":
-          newTheme = "light";
-          break;
-        case "light":
-          newTheme = "dark";
-          break;
-        case "dark":
-          newTheme = "light dark";
-          break;
-        default:
-          console.warn(`Can't find next theme from ${theme}. Reverting to light theme...`);
-      }
+      const newTheme = getNextTheme(theme);
 
       settings.setTheme(newTheme).then(() => {
-        displayTheme(newTheme);
+        displayTheme(newTheme, true);
       });
     });
   });
@@ -188,58 +176,6 @@ import { GoogleTranslateV1Translator } from "./translation-engines/google-transl
     document.getElementById("version-link").innerText = `v${isUnlisted ? version.substring(0, version.length - 2) : version}`;
   }
 
-  function displayThemeImages(isLight) {
-    Array.from(document.getElementsByClassName("page")).forEach(page => {
-      isLight ? page.classList.remove("dark") : page.classList.add("dark");
-    });
-  }
-
-  function displayThemeFooter(theme) {
-    let text;
-    let image;
-    switch (theme) {
-      case "light dark":
-        text = browser.i18n.getMessage("popupDefault");
-        image = "/icons/font-awesome/circle-half-stroke.svg";
-        break;
-      case "light":
-        text = browser.i18n.getMessage("popupLight");
-        image = "/icons/font-awesome/sun.svg";
-        break;
-      case "dark":
-        text = browser.i18n.getMessage("popupDark");
-        image = "/icons/font-awesome/moon.svg";
-        break;
-      default:
-        console.warn(`Can't display theme footer ${theme}.`);
-    }
-
-    document.getElementById("theme-button").innerText = text;
-    let themeImage = document.getElementById("theme-image");
-    themeImage.src = image;
-    themeImage.alt = `${text} theme`;
-  }
-
-  function displayTheme(theme) {
-    document.documentElement.style.setProperty("color-scheme", theme);
-
-    switch (theme) {
-      case "light dark":
-        displayThemeImages(window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches);
-        break;
-      case "light":
-        displayThemeImages(true);
-        break;
-      case "dark":
-        displayThemeImages(false);
-        break;
-      default:
-        console.warn(`Can't display theme ${theme}.`);
-    }
-
-    displayThemeFooter(theme);
-  }
-
   function activatePage(e) {
     e.preventDefault();
 
@@ -280,5 +216,5 @@ import { GoogleTranslateV1Translator } from "./translation-engines/google-transl
   await displayCurrentSettings();
   await updateStatus();
   displayVersion();
-  displayTheme(await settings.getTheme());
+  displayTheme(await settings.getTheme(), true);
 })();
