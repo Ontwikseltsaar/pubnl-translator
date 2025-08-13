@@ -52,7 +52,7 @@ Here are some things that PubNL Translator is not able to do, and which I don't 
 
 PubNL Translator uses the following external dependencies:
 
-- [Font Awesome](https://font-awesome.com/) by Font Awesome Team.
+- [Font Awesome](https://fontawesome.com/) by Font Awesome Team.
 - [Google Fonts](https://fonts.google.com/) by Google.
 - [vtt.js](https://github.com/mozilla/vtt.js) by Mozilla.
 - [JSZip](https://stuk.github.io/jszip/) by Stuart Knightley.
