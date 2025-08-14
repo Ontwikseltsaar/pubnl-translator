@@ -118,8 +118,6 @@ function parseWebVTT(input) {
   }
 
   const parser = new WebVTT.Parser(window);
-  let cues = [];
-
   // vtt.js requires us to use a decoder, but our input is already decoded. This decoder does nothing.
   parser.decoder = {
     decode(data, options) {
@@ -133,6 +131,7 @@ function parseWebVTT(input) {
     cues.push(c);
   };
 
+  let cues = [];
   let parsingError = null;
   parser.parse(input);
   if (parsingError) {

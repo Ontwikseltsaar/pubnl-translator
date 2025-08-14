@@ -31,7 +31,7 @@ body {
   --light-dark-image: light-dark(0, 1);
   --light-dark-reload: light-dark(#e35e01, #ff6d00);
 }
-.dark img {
+.dark .invertible {
   filter: invert(1);
 }
 

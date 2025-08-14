@@ -1,6 +1,7 @@
 "use strict";
 
 import { settings } from "./storage.js";
+import { displayTheme } from "./theme.js";
 
 (async () => {
   const table = document.getElementById("cache-table");
@@ -199,31 +200,6 @@ import { settings } from "./storage.js";
     }
   }
 
-  function displayThemeImages(isLight) {
-    isLight ? document.body.classList.remove("dark") : document.body.classList.add("dark");
-    Array.from(document.getElementsByClassName("page")).forEach(page => {
-      isLight ? page.classList.remove("dark") : page.classList.add("dark");
-    });
-  }
-
-  function displayTheme(theme) {
-    document.documentElement.style.setProperty("color-scheme", theme);
-
-    switch (theme) {
-      case "light dark":
-        displayThemeImages(window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches);
-        break;
-      case "light":
-        displayThemeImages(true);
-        break;
-      case "dark":
-        displayThemeImages(false);
-        break;
-      default:
-        console.warn(`Can't display theme ${theme}.`);
-    }
-  }
-
   document.querySelectorAll("th:nth-child(n+2)").forEach(th =>
     th.addEventListener("click", () => {
       const table = th.closest("table");
@@ -311,5 +287,5 @@ import { settings } from "./storage.js";
   });
 
   updateTable(table);
-  displayTheme(await settings.getTheme());
+  displayTheme(await settings.getTheme(), false);
 })();
