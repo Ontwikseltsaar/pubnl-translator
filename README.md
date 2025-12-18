@@ -44,7 +44,7 @@ Here are some things I hope to add in the future:
 
 Here are some things that PubNL Translator is not able to do, and which I don't expect it to be able to do in the future:
 
-- Each line is translated separately, so the context may get lost in translation.
+- Lines are translated in batches, so some context may get lost in translation.
 - PubNL Translator cannot translate live broadcasts.
 - PubNL Translator depends on the original subtitles of a video. If there were no subtitles originally, there will be no translated subtitles. Likewise, if the timing of the original subtitles is off, the timing of the translated subtitles will be off as well.
 
