@@ -44,7 +44,7 @@ Hier zijn een paar dingen die ik in de toekomst hoop toe te voegen:
 
 Dit zijn een paar dingen die PubNL Translator niet kan en waarvan ik niet verwacht dat het dat in de toekomst wel zal kunnen:
 
-- Elke regel wordt apart vertaald, waardoor de context verloren kan gaan bij de vertaling.
+- Regels worden gegroepeerd vertaald, dus een gedeelte van de context kan verloren gaan bij de vertaling.
 - PubNL Translator kan geen live-uitzendingen vertalen.
 - PubNL Translator is afhankelijk van de oorspronkelijke ondertitels van een video. Als er oorspronkelijk geen ondertitels waren, zullen er geen vertaalde ondertitels zijn, en als de timing van de oorspronkelijke ondertitels niet klopt, zal de timing van de vertaalde ondertitels ook niet kloppen.
 
