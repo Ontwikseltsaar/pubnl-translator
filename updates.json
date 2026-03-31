@@ -11,6 +11,11 @@
           "version": "1.0.1.0",
           "update_link": "https://github.com/Ontwikseltsaar/pubnl-translator/releases/download/1.0.1/pubnl-translator-1.0.1-signed.xpi",
           "update_hash": "sha256:638fa3f02eb8be90c7590efd5a97d0d3b32770cadca15883afff643de19a75c1"
+        },
+        {
+          "version": "1.1.0.0",
+          "update_link": "https://github.com/Ontwikseltsaar/pubnl-translator/releases/download/1.1.0/pubnl-translator-1.1.0-signed.xpi",
+          "update_hash": "sha256:e56bb9e8b182f7599ebec5d41e734592988577880dd1221a0fb1c50a5cc7b357"
         }
       ]
     }
