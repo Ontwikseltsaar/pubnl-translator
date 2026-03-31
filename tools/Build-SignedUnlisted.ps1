@@ -14,7 +14,7 @@ Write-Output "Inserting update information and modifying version in manifest.jso
 $manifest = Get-Content -Raw manifest.json | ConvertFrom-Json
 $manifest.browser_specific_settings.gecko | Add-Member -Type NoteProperty -Name "update_url" -Value "https://raw.githubusercontent.com/Ontwikseltsaar/pubnl-translator/refs/heads/main/updates.json"
 $manifest.version = "$Version.0"
-Set-Content -Path manifest.json -Value ($manifest | ConvertTo-Json)
+Set-Content -Path manifest.json -Value ($manifest | ConvertTo-Json -depth 4)
           
 ./node_modules/.bin/prettier --ignore-path .prettierignore manifest.json --write --log-level silent
 
