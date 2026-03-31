@@ -3,6 +3,7 @@
 import { GoogleTranslateV1Translator } from "./translation-engines/google-translate-v1.js";
 
 const LINE_LENGTH_CUTOFF = 35;
+const BATCH_SIZE = 5;
 
 function getFormattedChunk(remainder) {
   const hasFormattingRegex = RegExp("(<.+?>).*?</.+?>");
@@ -31,7 +32,7 @@ function getFormattedChunk(remainder) {
   // We extract all consecutive parts that have the same formatting.
   chunk.tag = { open: formattingMatch[1], close: `</${formattingMatch[1].match(tagNameRegex)[1]}>` };
   const formattedChunkRegex = RegExp(String.raw`^(${chunk.tag.open}.*?${chunk.tag.close}\s*)`);
-  for (;;) {
+  for (; ;) {
     let chunkMatch = remainder.text.match(formattedChunkRegex);
 
     if (!chunkMatch) {
@@ -79,20 +80,54 @@ function splitLongText(text) {
   return [text];
 }
 
-async function translateCue(text, sourceLanguage, targetLanguage) {
+function extractChunksFromCue(text) {
   let remainder = { text: text.replaceAll("\n", " ") };
-  let translatedCueLines = [];
-  const translator = new GoogleTranslateV1Translator();
+  let chunks = [];
 
   while (remainder.text.length > 0) {
-    // Separate text and formatting.
     const chunk = getFormattedChunk(remainder);
-    const translated = await translator.translate(chunk.text, sourceLanguage, targetLanguage);
+    chunks.push(chunk);
+  }
+
+  return chunks;
+}
+
+async function translateBatch(translator, texts, sourceLanguage, targetLanguage) {
+  if (texts.length === 0) return [];
+  if (texts.length === 1) {
+    return [await translator.translate(texts[0], sourceLanguage, targetLanguage)];
+  }
+
+  const markedText = texts.map((text, i) => `[${i}] ${text}`).join(" ");
+  const translatedMarked = await translator.translate(markedText, sourceLanguage, targetLanguage);
+
+  const result = new Array(texts.length).fill("");
+  const matches = [...translatedMarked.matchAll(/\[(\d+)\]\s*/g)];
+
+  for (let i = 0; i < matches.length; i++) {
+    const idx = parseInt(matches[i][1]);
+    if (idx < 0 || idx >= texts.length) {
+      continue;
+    }
+
+    const start = matches[i].index + matches[i][0].length;
+    const end = matches[i + 1]?.index ?? translatedMarked.length;
+    result[idx] = translatedMarked.substring(start, end).trim();
+  }
+
+  return result;
+}
+
+function reassembleCue(chunks, translatedTexts) {
+  let translatedCueLines = [];
+
+  for (let i = 0; i < chunks.length; i++) {
+    const chunk = chunks[i];
+    const translated = translatedTexts[i] || "";
     let multiline = splitLongText(translated);
 
-    // Restore formatting.
-    for (let i = 0; i < multiline.length; i++) {
-      multiline[i] = `${chunk.tag.open}${multiline[i]}${chunk.tag.close}`;
+    for (let j = 0; j < multiline.length; j++) {
+      multiline[j] = `${chunk.tag.open}${multiline[j]}${chunk.tag.close}`;
     }
 
     translatedCueLines.push(multiline.join("\n"));
@@ -102,8 +137,8 @@ async function translateCue(text, sourceLanguage, targetLanguage) {
 }
 
 function cueToString(cue, text) {
-  const startTime = new Date(Math.round(cue.startTime * 1000)).toISOString().match("T(.*)Z$")[1];
-  const endTime = new Date(Math.round(cue.endTime * 1000)).toISOString().match("T(.*)Z$")[1];
+  const startTime = new Date(Math.round(cue.startTime * 1000)).toISOString().match("T(.*)Z$")?.[1] ?? "";
+  const endTime = new Date(Math.round(cue.endTime * 1000)).toISOString().match("T(.*)Z$")?.[1] ?? "";
   const line = cue.line ? ` line:${cue.line}%` : "";
   const position = cue.position ? ` position:${cue.position}%` : "";
   const align = cue.align ? ` align:${cue.align.replace("middle", "center")}` : "";
@@ -143,17 +178,26 @@ function parseWebVTT(input) {
 
 export async function translateWebVTT(input, sourceLanguage, targetLanguage, progressFunction) {
   const cues = parseWebVTT(input);
-  const cueNum = cues.length;
+  const translator = new GoogleTranslateV1Translator();
 
-  let translatedCues = Array(cues.length);
-  for (let i = 0; i < cueNum; i++) {
-    translatedCues[i] = translateCue(cues[i].text, sourceLanguage, targetLanguage);
+  const cueChunks = cues.map(cue => extractChunksFromCue(cue.text));
+  const allTexts = cueChunks.flat().map(c => c.text);
+  const translatedTexts = [];
+
+  for (let i = 0; i < allTexts.length; i += BATCH_SIZE) {
+    const batch = allTexts.slice(i, i + BATCH_SIZE);
+    const translated = await translateBatch(translator, batch, sourceLanguage, targetLanguage);
+    translatedTexts.push(...translated);
+    progressFunction((translatedTexts.length / allTexts.length) * 100);
   }
 
+  let offset = 0;
   let translatedWebVTT = "WEBVTT\n\n";
-  for (let i = 0; i < cueNum; i++) {
-    translatedWebVTT += cueToString(cues[i], await translatedCues[i]);
-    progressFunction(((i + 1) / cueNum) * 100);
+  for (let i = 0; i < cues.length; i++) {
+    const chunks = cueChunks[i];
+    const texts = translatedTexts.slice(offset, offset + chunks.length);
+    offset += chunks.length;
+    translatedWebVTT += cueToString(cues[i], reassembleCue(chunks, texts));
   }
 
   return translatedWebVTT;
