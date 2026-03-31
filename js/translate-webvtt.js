@@ -32,7 +32,7 @@ function getFormattedChunk(remainder) {
   // We extract all consecutive parts that have the same formatting.
   chunk.tag = { open: formattingMatch[1], close: `</${formattingMatch[1].match(tagNameRegex)[1]}>` };
   const formattedChunkRegex = RegExp(String.raw`^(${chunk.tag.open}.*?${chunk.tag.close}\s*)`);
-  for (; ;) {
+  for (;;) {
     let chunkMatch = remainder.text.match(formattedChunkRegex);
 
     if (!chunkMatch) {
@@ -92,30 +92,48 @@ function extractChunksFromCue(text) {
   return chunks;
 }
 
-async function translateBatch(translator, texts, sourceLanguage, targetLanguage) {
-  if (texts.length === 0) return [];
-  if (texts.length === 1) {
-    return [await translator.translate(texts[0], sourceLanguage, targetLanguage)];
+async function translateCueBatch(translator, cueBatch, sourceLanguage, targetLanguage) {
+  let translatedCueBatch = [];
+
+  const markedText = cueBatch
+    .flat()
+    .map((text, i) => `[${i}] ${text}`)
+    .join(" ");
+  const translatedMarked = await translator.translate(markedText, sourceLanguage, targetLanguage);
+  const markedRegex = RegExp(String.raw`\[(\d+)\]\s*`, "g");
+  const matches = [...translatedMarked.matchAll(markedRegex)].sort((a, b) => parseInt(a[1]) - parseInt(b[1]));
+
+  let correctlySorted = true;
+  for (let i = 0; i < matches.length; i++) {
+    if (parseInt(matches[i][1]) !== i) {
+      correctlySorted = false;
+      break;
+    }
   }
 
-  const markedText = texts.map((text, i) => `[${i}] ${text}`).join(" ");
-  const translatedMarked = await translator.translate(markedText, sourceLanguage, targetLanguage);
-
-  const result = new Array(texts.length).fill("");
-  const matches = [...translatedMarked.matchAll(/\[(\d+)\]\s*/g)];
-
-  for (let i = 0; i < matches.length; i++) {
-    const idx = parseInt(matches[i][1]);
-    if (idx < 0 || idx >= texts.length) {
-      continue;
+  if (matches.length !== cueBatch.flat().length || !correctlySorted) {
+    for (const cueTexts of cueBatch) {
+      translatedCueBatch.push(cueTexts.map(async text => await translator.translate(text, sourceLanguage, targetLanguage)));
     }
 
-    const start = matches[i].index + matches[i][0].length;
-    const end = matches[i + 1]?.index ?? translatedMarked.length;
-    result[idx] = translatedMarked.substring(start, end).trim();
+    return translatedCueBatch;
   }
 
-  return result;
+  let offset = 0;
+  for (const cueTexts of cueBatch) {
+    let result = [];
+
+    for (let i = offset; i < offset + cueTexts.length; i++) {
+      const start = matches[i].index + matches[i][0].length;
+      const end = matches[i + 1]?.index ?? translatedMarked.length;
+      result.push(translatedMarked.substring(start, end).trim());
+    }
+
+    translatedCueBatch.push(result);
+    offset += cueTexts.length;
+  }
+
+  return translatedCueBatch;
 }
 
 function reassembleCue(chunks, translatedTexts) {
@@ -123,7 +141,7 @@ function reassembleCue(chunks, translatedTexts) {
 
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i];
-    const translated = translatedTexts[i] || "";
+    const translated = translatedTexts[i] ?? "";
     let multiline = splitLongText(translated);
 
     for (let j = 0; j < multiline.length; j++) {
@@ -181,23 +199,20 @@ export async function translateWebVTT(input, sourceLanguage, targetLanguage, pro
   const translator = new GoogleTranslateV1Translator();
 
   const cueChunks = cues.map(cue => extractChunksFromCue(cue.text));
-  const allTexts = cueChunks.flat().map(c => c.text);
-  const translatedTexts = [];
+  let translatedCues = [];
 
-  for (let i = 0; i < allTexts.length; i += BATCH_SIZE) {
-    const batch = allTexts.slice(i, i + BATCH_SIZE);
-    const translated = await translateBatch(translator, batch, sourceLanguage, targetLanguage);
-    translatedTexts.push(...translated);
-    progressFunction((translatedTexts.length / allTexts.length) * 100);
+  for (let i = 0; i < cueChunks.length; i += BATCH_SIZE) {
+    const cueBatch = cueChunks.slice(i, i + BATCH_SIZE).map(cue => cue.map(chunk => chunk.text));
+    const translated = translateCueBatch(translator, cueBatch, sourceLanguage, targetLanguage);
+    translatedCues.push(translated);
   }
 
-  let offset = 0;
+  translatedCues = (await Promise.all(translatedCues)).flat();
   let translatedWebVTT = "WEBVTT\n\n";
   for (let i = 0; i < cues.length; i++) {
     const chunks = cueChunks[i];
-    const texts = translatedTexts.slice(offset, offset + chunks.length);
-    offset += chunks.length;
-    translatedWebVTT += cueToString(cues[i], reassembleCue(chunks, texts));
+    translatedWebVTT += cueToString(cues[i], reassembleCue(chunks, await Promise.all(translatedCues[i])));
+    progressFunction(((i + 1) / cues.length) * 100);
   }
 
   return translatedWebVTT;
